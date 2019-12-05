@@ -1,5 +1,6 @@
 #include "glwidget.h"
 #include <QMatrix4x4>
+#include <QKeyEvent>
 static const GLfloat VERTEX_DATA[] = {
     //face 1 : z= 0.5f
     0.5f, 0.5f, 0.5f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
@@ -45,10 +46,11 @@ static const GLfloat VERTEX_DATA[] = {
     -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
 };
 GLWidget::GLWidget(QWidget *nulltpr):
-    QOpenGLWidget(nulltpr), m_vbo(nullptr), m_vao(nullptr), m_shader(nullptr), m_texture(nullptr)
+    QOpenGLWidget(nulltpr), m_vbo(nullptr), m_vao(nullptr), m_shader(nullptr), m_texture(nullptr), camera_pos(0.f, 0.f, 3.f)
 {
     timer = new QElapsedTimer();
     timer->start();
+    setFocusPolicy(Qt::StrongFocus); // enable the widget to receive key press
 }
 
 GLWidget::~GLWidget() {
@@ -118,6 +120,8 @@ void GLWidget::paintGL()
     //build MVP matrix
     QMatrix4x4 mvp;
     mvp.perspective(45.0f, this->aspectRatio, 0.1f, 100.0f); // view: 45 degree
+    QVector3D center = this->camera_pos - QVector3D(0, 0, 5.f);
+    mvp.lookAt(this->camera_pos, center, QVector3D(0.f, 1.f, 0.f)); // look from (0,0,3) at (0,0,0), with (0, 1, 0) as the up direction
     mvp.translate(0.0f, 0.0f, -3.0f); // view: translate (0, 0, -3)
     float degree = 30.0f * timer->elapsed() / 1000.f;
     mvp.rotate(degree, 0.5f, 1.0f, 0.0f); // model : rotate 30 degree persecond
@@ -129,4 +133,21 @@ void GLWidget::paintGL()
     m_vao->release();
     m_texture->release();
     update(); // requrest to schedule an update
+}
+
+void GLWidget::keyPressEvent(QKeyEvent *event) {
+    switch(event->key()) {
+        case Qt::Key::Key_Up:
+            this->camera_pos.setZ(this->camera_pos.z() - 0.2f);
+            break;
+        case Qt::Key::Key_Down:
+            this->camera_pos.setZ(this->camera_pos.z() + 0.2f);
+            break;
+        case Qt::Key::Key_Left:
+            this->camera_pos.setX(this->camera_pos.x() - 0.2f);
+            break;
+        case Qt::Key::Key_Right:
+            this->camera_pos.setX(this->camera_pos.x() + 0.2f);
+            break;
+    }
 }

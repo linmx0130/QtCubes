@@ -19,12 +19,14 @@ protected:
     void initializeGL();
     void paintGL();
     void resizeGL(int w, int h);
+    void keyPressEvent(QKeyEvent *event);
 private:
     QOpenGLBuffer *m_vbo;
     QOpenGLVertexArrayObject *m_vao;
     QOpenGLShaderProgram *m_shader;
     QOpenGLTexture *m_texture;
     QElapsedTimer *timer;
+    QVector3D camera_pos;
     float aspectRatio;
 };
 
