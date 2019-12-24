@@ -46,7 +46,7 @@ static const GLfloat VERTEX_DATA[] = {
     -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
 };
 GLWidget::GLWidget(QWidget *nulltpr):
-    QOpenGLWidget(nulltpr), m_vbo(nullptr), m_vao(nullptr), m_shader(nullptr), m_texture(nullptr), camera_pos(0.f, 0.f, 3.f)
+    QOpenGLWidget(nulltpr), m_vbo(nullptr), m_vao(nullptr), m_shader(nullptr), m_texture(nullptr), camera_pos(0.f, 0.f, 3.f), camera_direction(0.f, 0.f, 1.f)
 {
     timer = new QElapsedTimer();
     timer->start();
@@ -120,7 +120,7 @@ void GLWidget::paintGL()
     //build MVP matrix
     QMatrix4x4 mvp;
     mvp.perspective(45.0f, this->aspectRatio, 0.1f, 100.0f); // view: 45 degree
-    QVector3D center = this->camera_pos - QVector3D(0, 0, 5.f);
+    QVector3D center = this->camera_pos - this->camera_direction * 5.0f;
     mvp.lookAt(this->camera_pos, center, QVector3D(0.f, 1.f, 0.f)); // look from (0,0,3) at (0,0,0), with (0, 1, 0) as the up direction
     mvp.translate(0.0f, 0.0f, -3.0f); // view: translate (0, 0, -3)
     float degree = 30.0f * timer->elapsed() / 1000.f;
@@ -136,18 +136,30 @@ void GLWidget::paintGL()
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *event) {
+    // 2 degree rotation
+    const float SIN_2_DEG = 0.03489949670250097;
+    const float COS_2_DEG = 0.9993908270190958;
+    float old_x = camera_direction.x();
+    float old_z = camera_direction.z();
+    float new_x, new_z;
     switch(event->key()) {
         case Qt::Key::Key_Up:
-            this->camera_pos.setZ(this->camera_pos.z() - 0.2f);
+            this->camera_pos = this->camera_pos - this->camera_direction * 0.2f;
             break;
         case Qt::Key::Key_Down:
-            this->camera_pos.setZ(this->camera_pos.z() + 0.2f);
-            break;
-        case Qt::Key::Key_Left:
-            this->camera_pos.setX(this->camera_pos.x() - 0.2f);
+            this->camera_pos = this->camera_pos + this->camera_direction * 0.2f;
             break;
         case Qt::Key::Key_Right:
-            this->camera_pos.setX(this->camera_pos.x() + 0.2f);
+            new_x = old_x * COS_2_DEG - old_z * SIN_2_DEG;
+            new_z = old_x * SIN_2_DEG + old_z * COS_2_DEG;
+            this->camera_direction.setX(new_x);
+            this->camera_direction.setZ(new_z);
+            break;
+        case Qt::Key::Key_Left:
+            new_x = old_x * COS_2_DEG + old_z * SIN_2_DEG;
+            new_z = -old_x * SIN_2_DEG + old_z * COS_2_DEG;
+            this->camera_direction.setX(new_x);
+            this->camera_direction.setZ(new_z);
             break;
     }
 }

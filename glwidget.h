@@ -27,6 +27,7 @@ private:
     QOpenGLTexture *m_texture;
     QElapsedTimer *timer;
     QVector3D camera_pos;
+    QVector3D camera_direction;
     float aspectRatio;
 };
 
