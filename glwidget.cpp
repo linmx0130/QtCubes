@@ -47,7 +47,7 @@ static const GLfloat VERTEX_DATA[] = {
 };
 GLWidget::GLWidget(QWidget *nulltpr):
     QOpenGLWidget(nulltpr), m_vbo(nullptr), m_vao(nullptr), m_shader(nullptr), m_texture(nullptr), camera_pos(0.f, 0.f, 3.f), camera_direction(0.f, 0.f, 1.f),
-    isRotating(true), lastTimerValue(0)
+    _isRotating(true), lastTimerValue(0)
 {
     timer = new QElapsedTimer();
     timer->start();
@@ -102,6 +102,7 @@ void GLWidget::initializeGL()
     // release objects
     m_vbo->release();
     m_vao->release();
+    emit stateChanged();
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -114,11 +115,12 @@ void GLWidget::paintGL()
     QVector3D translationPos[] = {QVector3D(0.0f, 2.0f, -6.0f),
                                   QVector3D(-4.0f, 2.0f, -9.0f),
                                   QVector3D(3.0f, -2.0f, -4.5f),
+                                  QVector3D(-5.0f, -4.5f, -12.4f),
                                   QVector3D(0.0f, 0.0f, -3.0f)};
 
-    float initialDegree[] = {12.0f, 130.0f, 72.0f, 0.0f};
+    float initialDegree[] = {12.0f, 130.0f, 72.0f, 145.0f, 0.0f};
     qint64 newTimeValue = timer->elapsed();
-    if (isRotating) {
+    if (isRotating()) {
         degree += 30.0f * (newTimeValue - lastTimerValue) /1000.f;
     }
     lastTimerValue = newTimeValue;
@@ -136,7 +138,7 @@ void GLWidget::paintGL()
     projMat.lookAt(this->camera_pos, center, QVector3D(0.f, 1.f, 0.f)); // look from (0,0,3) at (0,0,0), with (0, 1, 0) as the up direction
 
 
-    for (int i=0;i<4;++i) {
+    for (int i=0;i<5;++i) {
         QMatrix4x4 viewMat;
         viewMat.translate(translationPos[i]);
         QMatrix4x4 modelMat;
@@ -182,8 +184,9 @@ void GLWidget::keyPressEvent(QKeyEvent *event) {
             this->camera_direction.setZ(new_z);
             break;
         case Qt::Key::Key_Space:
-            this->isRotating = ! this->isRotating;
+            this->_isRotating = ! this->_isRotating;
             break;
     }
+    emit stateChanged();
     update();
 }
