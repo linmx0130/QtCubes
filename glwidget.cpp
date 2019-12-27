@@ -3,50 +3,51 @@
 #include <QKeyEvent>
 static const GLfloat VERTEX_DATA[] = {
     //face 1 : z= 0.5f
-    0.5f, 0.5f, 0.5f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-    0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-    -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-    -0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-    0.5f, 0.5f, 0.5f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-     -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+    0.5f, 0.5f, 0.5f,  0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+    0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+    0.5f, 0.5f, 0.5f,  0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+     -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
     //face 2: y=0.5f
-    -0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-    0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-    -0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-    0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-    -0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-    0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+    0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+    0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+    0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
     //face 3: x = 0.5f
-    0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-    0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-    0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-    0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-    0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-    0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+    0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+    0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+    0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+    0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
     //face 4: z=-0.5
-    0.5f, 0.5f, -0.5f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-    0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-    -0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-    0.5f, 0.5f, -0.5f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-     -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+    0.5f, 0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+    0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
+    0.5f, 0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+     -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
     //face 5: y=-0.5f
-    -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-    0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-    0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-    0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    -0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+    0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+    0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+    0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
     //face 6: x=-0.5f
-    -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-    -0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-    -0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-    -0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-    -0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+    -0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+    -0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
 };
 GLWidget::GLWidget(QWidget *nulltpr):
-    QOpenGLWidget(nulltpr), m_vbo(nullptr), m_vao(nullptr), m_shader(nullptr), m_texture(nullptr), camera_pos(0.f, 0.f, 3.f), camera_direction(0.f, 0.f, 1.f)
+    QOpenGLWidget(nulltpr), m_vbo(nullptr), m_vao(nullptr), m_shader(nullptr), m_texture(nullptr), camera_pos(0.f, 0.f, 3.f), camera_direction(0.f, 0.f, 1.f),
+    isRotating(true), lastTimerValue(0)
 {
     timer = new QElapsedTimer();
     timer->start();
@@ -110,6 +111,17 @@ void GLWidget::resizeGL(int w, int h)
 
 void GLWidget::paintGL()
 {
+    QVector3D translationPos[] = {QVector3D(0.0f, 2.0f, -6.0f),
+                                  QVector3D(-4.0f, 2.0f, -9.0f),
+                                  QVector3D(3.0f, -2.0f, -4.5f),
+                                  QVector3D(0.0f, 0.0f, -3.0f)};
+
+    float initialDegree[] = {12.0f, 130.0f, 72.0f, 0.0f};
+    qint64 newTimeValue = timer->elapsed();
+    if (isRotating) {
+        degree += 30.0f * (newTimeValue - lastTimerValue) /1000.f;
+    }
+    lastTimerValue = newTimeValue;
     QOpenGLFunctions *f = this->context()->functions();
     f->glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     f->glClearColor(0.0f, 0.2f, 0.0f, 1.0f);
@@ -118,16 +130,24 @@ void GLWidget::paintGL()
     m_texture->bind();
 
     //build MVP matrix
-    QMatrix4x4 mvp;
-    mvp.perspective(45.0f, this->aspectRatio, 0.1f, 100.0f); // view: 45 degree
+    QMatrix4x4 projMat;
+    projMat.perspective(45.0f, this->aspectRatio, 0.1f, 100.0f); // view: 45 degree
     QVector3D center = this->camera_pos - this->camera_direction * 5.0f;
-    mvp.lookAt(this->camera_pos, center, QVector3D(0.f, 1.f, 0.f)); // look from (0,0,3) at (0,0,0), with (0, 1, 0) as the up direction
-    mvp.translate(0.0f, 0.0f, -3.0f); // view: translate (0, 0, -3)
-    float degree = 30.0f * timer->elapsed() / 1000.f;
-    mvp.rotate(degree, 0.5f, 1.0f, 0.0f); // model : rotate 30 degree persecond
-    m_shader->setUniformValue(m_shader->uniformLocation("MVP"), mvp);
-    // draw object
-    f->glDrawArrays(GL_TRIANGLES, 0, 6 * 6);
+    projMat.lookAt(this->camera_pos, center, QVector3D(0.f, 1.f, 0.f)); // look from (0,0,3) at (0,0,0), with (0, 1, 0) as the up direction
+
+
+    for (int i=0;i<4;++i) {
+        QMatrix4x4 viewMat;
+        viewMat.translate(translationPos[i]);
+        QMatrix4x4 modelMat;
+        modelMat.rotate(degree + initialDegree[i], 0.5f, 1.0f, 0.0f);
+        m_shader->setUniformValue(m_shader->uniformLocation("projectMat"), projMat);
+        m_shader->setUniformValue(m_shader->uniformLocation("viewMat"), viewMat);
+        m_shader->setUniformValue(m_shader->uniformLocation("modelMat"), modelMat);
+        m_shader->setUniformValue(m_shader->uniformLocation("lightPos"), QVector3D(-4.0f, 0.0f, 3.0f));
+        // draw object
+        f->glDrawArrays(GL_TRIANGLES, 0, 6 * 6);
+    }
     // release
     m_shader->release();
     m_vao->release();
@@ -161,5 +181,9 @@ void GLWidget::keyPressEvent(QKeyEvent *event) {
             this->camera_direction.setX(new_x);
             this->camera_direction.setZ(new_z);
             break;
+        case Qt::Key::Key_Space:
+            this->isRotating = ! this->isRotating;
+            break;
     }
+    update();
 }

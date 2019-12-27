@@ -29,6 +29,9 @@ private:
     QVector3D camera_pos;
     QVector3D camera_direction;
     float aspectRatio;
+    bool isRotating;
+    qint64 lastTimerValue;
+    float degree;
 };
 
 #endif // GLWIDGET_H
