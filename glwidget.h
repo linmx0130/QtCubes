@@ -3,12 +3,11 @@
 
 #include <QWidget>
 #include <QOpenGLWidget>
-#include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
-#include <QOpenGLShaderProgram>
-#include <QOpenGLVertexArrayObject>
-#include <QOpenGLTexture>
 #include <QElapsedTimer>
+
+#include "cubemodel.h"
+
 class GLWidget : public QOpenGLWidget
 {
     Q_OBJECT
@@ -29,16 +28,13 @@ signals:
     void stateChanged();
 
 protected:
-    void initializeGL();
-    void paintGL();
-    void resizeGL(int w, int h);
-    void keyPressEvent(QKeyEvent *event);
+    virtual void initializeGL() override;
+    virtual void paintGL() override;
+    virtual void resizeGL(int w, int h) override;
+    virtual void keyPressEvent(QKeyEvent *event) override;
 
 private:
-    QOpenGLBuffer *m_vbo;
-    QOpenGLVertexArrayObject *m_vao;
-    QOpenGLShaderProgram *m_shader;
-    QOpenGLTexture *m_texture;
+    CubeModel *cube;
     QElapsedTimer *timer;
     QVector3D camera_pos;
     QVector3D camera_direction;
