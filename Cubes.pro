@@ -1,5 +1,6 @@
 QT       += core gui
 
+equals(QT_MAJOR_VERSION, 6): QT += openglwidgets
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
