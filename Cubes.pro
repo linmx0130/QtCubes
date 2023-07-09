@@ -3,7 +3,7 @@ QT       += core gui
 equals(QT_MAJOR_VERSION, 6): QT += openglwidgets
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++17
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -20,12 +20,14 @@ SOURCES += \
     cubemodel.cpp \
     glwidget.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    spheremodel.cpp
 
 HEADERS += \
     cubemodel.h \
     glwidget.h \
-    mainwindow.h
+    mainwindow.h \
+    spheremodel.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

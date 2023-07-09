@@ -3,7 +3,7 @@
 #include <QKeyEvent>
 
 GLWidget::GLWidget(QWidget *nulltpr):
-    QOpenGLWidget(nulltpr), cube(nullptr), camera_pos(0.f, 0.f, 3.f), camera_direction(0.f, 0.f, 1.f),
+    QOpenGLWidget(nulltpr), cube(nullptr), camera_pos(0.f, 0.f, 3.f), camera_direction(0.f, 0.f, 1.f), sphere(nullptr),
     _isRotating(true), lastTimerValue(0)
 {
     timer = new QElapsedTimer();
@@ -14,6 +14,9 @@ GLWidget::GLWidget(QWidget *nulltpr):
 GLWidget::~GLWidget() {
     if (cube!=nullptr) {
         delete cube;
+    }
+    if (sphere!=nullptr){
+        delete sphere;
     }
 }
 
@@ -29,6 +32,11 @@ void GLWidget::initializeGL()
         delete cube;
     }
     cube = new CubeModel(f);
+
+    if (sphere !=nullptr) {
+        delete sphere;
+    }
+    sphere = new SphereModel(f);
 
     emit stateChanged();
 }
@@ -56,7 +64,6 @@ void GLWidget::paintGL()
     f->glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     f->glClearColor(0.0f, 0.2f, 0.0f, 1.0f);
 
-    cube->bindModel();
 
     //build MVP matrix
     QMatrix4x4 projMat;
@@ -64,7 +71,19 @@ void GLWidget::paintGL()
     QVector3D center = this->camera_pos - this->camera_direction * 5.0f;
     projMat.lookAt(this->camera_pos, center, QVector3D(0.f, 1.f, 0.f)); // look from (0,0,3) at (0,0,0), with (0, 1, 0) as the up direction
     QVector3D lightPos(-4.0f, 0.0f, 3.0f);
-    for (int i=0;i<5;++i) {
+
+    sphere->bindModel();
+    {
+        QMatrix4x4 viewMat;
+        viewMat.translate(translationPos[0]);
+        QMatrix4x4 modelMat;
+        modelMat.rotate(degree + initialDegree[0], 0.5f, 1.0f, 0.0f);
+        sphere->draw(modelMat, viewMat, projMat, lightPos);
+    }
+    sphere->releaseModel();
+
+    cube->bindModel();
+    for (int i=1;i<5;++i) {
         QMatrix4x4 viewMat;
         viewMat.translate(translationPos[i]);
         QMatrix4x4 modelMat;
@@ -72,6 +91,8 @@ void GLWidget::paintGL()
         cube->draw(modelMat, viewMat, projMat, lightPos);
     }
     cube->releaseModel();
+
+
     update(); // requrest to schedule an update
 }
 

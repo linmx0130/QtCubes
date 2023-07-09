@@ -7,6 +7,7 @@
 #include <QElapsedTimer>
 
 #include "cubemodel.h"
+#include "spheremodel.h"
 
 class GLWidget : public QOpenGLWidget
 {
@@ -35,6 +36,7 @@ protected:
 
 private:
     CubeModel *cube;
+    SphereModel *sphere;
     QElapsedTimer *timer;
     QVector3D camera_pos;
     QVector3D camera_direction;
