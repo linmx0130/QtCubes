@@ -1,3 +1,7 @@
+/* spheremodel.h
+ * 
+ * Header file of the sphere model.
+ */
 #ifndef SPHEREMODEL_H
 #define SPHEREMODEL_H
 
@@ -34,14 +38,14 @@ private:
 
     std::vector<GLfloat> vertices;
 
-    std::vector<std::vector<std::pair<GLfloat, GLfloat>>> generateSphereAngelCoordinates(
+    std::vector<std::vector<std::pair<GLfloat, GLfloat>>> generateSphereAngleCoordinates(
         uint32_t stackCount,
         uint32_t sectionCount
     );
 
-    std::vector<GLfloat> getCartesianCoordFromAngelCoord(std::pair<GLfloat, GLfloat> angel);
+    std::vector<GLfloat> getCartesianCoordFromAngleCoord(std::pair<GLfloat, GLfloat> angle);
 
-    void addSquareToVertices(
+    void addRectangleToVertices(
         const std::vector<GLfloat>& tl,
         const std::vector<GLfloat>& dl,
         const std::vector<GLfloat>& tr,

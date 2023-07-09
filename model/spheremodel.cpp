@@ -1,3 +1,8 @@
+/* spheremodel.cpp
+ * Implementation of the sphere model.
+ * 
+ * The approach follows a [blog](http://www.songho.ca/opengl/gl_sphere.html) by Song Ho Ahn.
+ */
 #include "spheremodel.h"
 #include <vector>
 #include <utility>
@@ -7,23 +12,9 @@ const uint32_t STACK_COUNT = 40;
 const uint32_t SECTION_COUNT = 40;
 const GLfloat _PI = 3.1415926f;
 
-std::vector<std::vector<std::pair<GLfloat, GLfloat>>> SphereModel::generateSphereAngelCoordinates(uint32_t stackCount, uint32_t sectionCount) {
-    std::vector<std::vector<std::pair<GLfloat, GLfloat>>> value;
-    for (uint32_t i = 0; i <= stackCount; ++i) {
-        std::vector<std::pair<GLfloat, GLfloat>> row(sectionCount);
-        GLfloat phi = _PI / 2.0f - _PI * i / stackCount;
-        for (uint32_t j=0; j <sectionCount; ++j) {
-            GLfloat theta = _PI * 2.0f * j / sectionCount;
-            row[j] = std::make_pair(phi, theta);
-        }
-        value.push_back(row);
-    }
-    return value;
-}
-
 SphereModel::SphereModel(QOpenGLFunctions *f):AbstractModel(), f(f)
 {
-    std::vector<std::vector<std::pair<GLfloat, GLfloat>>> coordinates = generateSphereAngelCoordinates(STACK_COUNT, SECTION_COUNT);
+    std::vector<std::vector<std::pair<GLfloat, GLfloat>>> coordinates = generateSphereAngleCoordinates(STACK_COUNT, SECTION_COUNT);
     initVertices(coordinates);
     m_shader = new QOpenGLShaderProgram();
     m_shader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/sphereVertexShader.vsh");
@@ -44,9 +35,13 @@ SphereModel::SphereModel(QOpenGLFunctions *f):AbstractModel(), f(f)
     m_vbo->bind();
     // store vertex to VBO
     m_vbo->allocate(this->vertices.data(), this->vertices.size() * sizeof(GLfloat));
+
     // apply data to vertex shader
     f->glEnableVertexAttribArray(0);
+    // each vertex takes 3 float numbers in the vertices data.
+    // stripe is also 3 numbers as we don't have other vertex shader inputs.
     f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+
     // release objects
     m_vbo->release();
     m_vao->release();
@@ -83,10 +78,44 @@ void SphereModel::draw(
     f->glDrawArrays(GL_TRIANGLES, 0, count);
 }
 
+/**
+ * This function generates the angle coordinates of all points that compose the
+ * triangles of the sphere surface. We split the surface into 
+ *   stackCount * sectionCount
+ * rectangles. The angle coordinates are a pair of float: (\phi, \theta).
+ * 
+ * * \phi ranges from -PI/2 to PI/
+ * * \theta ranges from 0 to 2*PI
+ * 
+ * All points of the sphere surface can be determined by this coordinate.
+ */
+std::vector<std::vector<std::pair<GLfloat, GLfloat>>> SphereModel::generateSphereAngleCoordinates(uint32_t stackCount, uint32_t sectionCount) {
+    std::vector<std::vector<std::pair<GLfloat, GLfloat>>> value;
+    for (uint32_t i = 0; i <= stackCount; ++i) {
+        std::vector<std::pair<GLfloat, GLfloat>> row(sectionCount);
+        GLfloat phi = _PI / 2.0f - _PI * i / stackCount;
+        for (uint32_t j=0; j <sectionCount; ++j) {
+            GLfloat theta = _PI * 2.0f * j / sectionCount;
+            row[j] = std::make_pair(phi, theta);
+        }
+        value.push_back(row);
+    }
+    return value;
+}
 
-std::vector<GLfloat> SphereModel::getCartesianCoordFromAngelCoord(std::pair<GLfloat, GLfloat> angel) {
-    GLfloat phi = angel.first;
-    GLfloat theta = angel.second;
+/**
+ * This function transform the angle coordinates of (\phi, \theta) into 3-D
+ * Cartesian coordinates of (x, y, z), with (0, 0, 0) as the center of the 
+ * sphere and 1.0 as the radius. We have
+ * * x = cos(\phi) * cos(\theta)
+ * * y = cos(\phi) * sin(\theta)
+ * * z = sin(\phi)
+ * 
+ * The return value is a vector of 3 float numbers: (x, y, z)
+ */
+std::vector<GLfloat> SphereModel::getCartesianCoordFromAngleCoord(std::pair<GLfloat, GLfloat> angle) {
+    GLfloat phi = angle.first;
+    GLfloat theta = angle.second;
     GLfloat cosPhi = cosf(phi);
     GLfloat sinPhi = sinf(phi);
     GLfloat cosTheta = cosf(theta);
@@ -94,6 +123,14 @@ std::vector<GLfloat> SphereModel::getCartesianCoordFromAngelCoord(std::pair<GLfl
     return std::vector<GLfloat>{cosPhi * cosTheta, cosPhi * sinTheta, sinPhi};
 }
 
+/**
+ * This function generate the vertices for drawing the spheres. We pick the
+ * points at 
+ *   (i, j), (i, j+1), (i+1, j), (i+1, j+1)
+ * to create a rectangle and draw them with two triangles.
+ * 
+ * * `coords` is the angle coordiantes to use.
+ */
 void SphereModel::initVertices(const std::vector<std::vector<std::pair<GLfloat, GLfloat>>> &coords){
     const uint32_t N = coords.size();
     const uint32_t M = coords[0].size();
@@ -101,18 +138,18 @@ void SphereModel::initVertices(const std::vector<std::vector<std::pair<GLfloat, 
     vertices.reserve(18 * N * M);
     for (uint32_t i = 0; i < N - 1; ++i) {
         for (uint32_t j = 0;j <M-1; ++j) {
-            auto cij = getCartesianCoordFromAngelCoord(coords[i][j]);
-            auto ci1j = getCartesianCoordFromAngelCoord(coords[i+1][j]);
-            auto cij1 = getCartesianCoordFromAngelCoord(coords[i][j+1]);
-            auto ci1j1 = getCartesianCoordFromAngelCoord(coords[i+1][j+1]);
-            addSquareToVertices(cij, ci1j, cij1, ci1j1);
+            auto cij = getCartesianCoordFromAngleCoord(coords[i][j]);
+            auto ci1j = getCartesianCoordFromAngleCoord(coords[i+1][j]);
+            auto cij1 = getCartesianCoordFromAngleCoord(coords[i][j+1]);
+            auto ci1j1 = getCartesianCoordFromAngleCoord(coords[i+1][j+1]);
+            addRectangleToVertices(cij, ci1j, cij1, ci1j1);
         }
 
-        auto cij = getCartesianCoordFromAngelCoord(coords[i][M-1]);
-        auto ci1j = getCartesianCoordFromAngelCoord(coords[i+1][M-1]);
-        auto cij1 = getCartesianCoordFromAngelCoord(coords[i][0]);
-        auto ci1j1 = getCartesianCoordFromAngelCoord(coords[i+1][0]);
-        addSquareToVertices(cij, ci1j, cij1, ci1j1);
+        auto cij = getCartesianCoordFromAngleCoord(coords[i][M-1]);
+        auto ci1j = getCartesianCoordFromAngleCoord(coords[i+1][M-1]);
+        auto cij1 = getCartesianCoordFromAngleCoord(coords[i][0]);
+        auto ci1j1 = getCartesianCoordFromAngleCoord(coords[i+1][0]);
+        addRectangleToVertices(cij, ci1j, cij1, ci1j1);
     }
 }
 void SphereModel::addVertexToVertices(const std::vector<GLfloat>& v) {
@@ -121,7 +158,7 @@ void SphereModel::addVertexToVertices(const std::vector<GLfloat>& v) {
     vertices.push_back(v[2]);
 }
 
-void SphereModel::addSquareToVertices(
+void SphereModel::addRectangleToVertices(
     const std::vector<GLfloat>& tl,
     const std::vector<GLfloat>& dl,
     const std::vector<GLfloat>& tr,

@@ -1,3 +1,7 @@
+/* 
+ * sphereFragmentShader.fsh
+ * This is the fragment shader for the sphere model.
+ */
 uniform vec3 lightPos;
 varying vec3 normalVec;
 varying vec3 fragPosition;

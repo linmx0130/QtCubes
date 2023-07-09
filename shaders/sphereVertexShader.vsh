@@ -1,3 +1,7 @@
+/* 
+ * sphereVertexShader.vsh
+ * This is the vertex shader for the sphere model.
+ */
 attribute vec3 posVertex;
 uniform mat4 projectMat;
 uniform mat4 viewMat;
