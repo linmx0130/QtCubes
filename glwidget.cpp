@@ -1,3 +1,14 @@
+/*
+ * glwidget.cpp
+ * Implementation of the canvas widget.
+ * 
+ * Copyright (c) Mengxiao Lin <linmx0130@gmail.com>
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 #include "glwidget.h"
 #include <QMatrix4x4>
 #include <QKeyEvent>

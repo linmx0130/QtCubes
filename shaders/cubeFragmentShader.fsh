@@ -1,4 +1,13 @@
 #version 330
+/* cubeFragmentShader.fsh
+ * Fragment shader of the cube model.
+ * 
+ * Copyright (c) Mengxiao Lin <linmx0130@gmail.com>
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 in vec2 texCoord;
 in vec3 normalVec;
 in vec3 fragPosition;

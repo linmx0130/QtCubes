@@ -1,7 +1,12 @@
 /* spheremodel.cpp
  * Implementation of the sphere model.
- * 
  * The approach follows a [blog](http://www.songho.ca/opengl/gl_sphere.html) by Song Ho Ahn.
+ * 
+ * Copyright (c) Mengxiao Lin <linmx0130@gmail.com>
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 #include "spheremodel.h"
 #include <vector>

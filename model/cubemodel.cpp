@@ -1,3 +1,12 @@
+/* cubemodel.cpp
+ * Implementation of the cude model.
+ *  
+ * Copyright (c) Mengxiao Lin <linmx0130@gmail.com>
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 #include "cubemodel.h"
 
 static const GLfloat _CUBE_MODEL_VERTEX_DATA[] = {
@@ -49,8 +58,8 @@ CubeModel::CubeModel(QOpenGLFunctions* f): AbstractModel(), f(f)
 {
     // load shader
     m_shader = new QOpenGLShaderProgram();
-    m_shader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/vertexShader.shader");
-    m_shader->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/fragmentShader.shader");
+    m_shader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/cubeVertexShader.vsh");
+    m_shader->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/cubeFragmentShader.fsh");
     if (m_shader->link()) {
         qDebug("Shaders link success.");
     } else {

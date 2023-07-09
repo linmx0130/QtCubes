@@ -1,6 +1,12 @@
 /* 
  * sphereFragmentShader.fsh
  * This is the fragment shader for the sphere model.
+ *
+ * Copyright (c) Mengxiao Lin <linmx0130@gmail.com>
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 uniform vec3 lightPos;
 varying vec3 normalVec;

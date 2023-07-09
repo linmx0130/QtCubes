@@ -1,3 +1,13 @@
+/* abstractmodel.h
+ * Header file of the abstract model, base class of all models.
+ *  
+ * Copyright (c) Mengxiao Lin <linmx0130@gmail.com>
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 #ifndef ABSTRACTMODEL_H
 #define ABSTRACTMODEL_H
 

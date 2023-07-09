@@ -1,3 +1,14 @@
+/*
+ * mainwindow.h
+ * Main window header file.
+ * 
+ * Copyright (c) Mengxiao Lin <linmx0130@gmail.com>
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 

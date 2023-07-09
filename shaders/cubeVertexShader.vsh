@@ -1,3 +1,14 @@
+/*
+ * cubeVertexShader.vsh
+ * Vertex shader of the cube model.
+ * 
+ * Copyright (c) Mengxiao Lin <linmx0130@gmail.com>
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+ 
 #version 330
 layout(location = 0) in vec3 posVertex;
 layout(location = 1) in vec3 normalVertex;
