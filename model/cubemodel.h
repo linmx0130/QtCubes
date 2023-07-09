@@ -8,7 +8,9 @@
 #include <QOpenGLFunctions>
 #include <QMatrix4x4>
 
-class CubeModel
+#include "abstractmodel.h"
+
+class CubeModel: public AbstractModel
 {
 private:
     QOpenGLBuffer *m_vbo;
@@ -19,16 +21,17 @@ private:
 
 public:
     CubeModel(QOpenGLFunctions *f);
+    ~CubeModel();
 
     // bind the OpenGL objects of this model to prepare for rendering
-    void bindModel();
+    virtual void bindModel() override;
     // draw the model with the OpenGL and MVP, lighting parameters
-    void draw(const QMatrix4x4 &modelMat,
+    virtual void draw(const QMatrix4x4 &modelMat,
               const QMatrix4x4 &viewMat,
               const QMatrix4x4 &projMat,
-              const QVector3D& lightPos);
+              const QVector3D& lightPos) override;
     // release OpenGL objects of this model from OpenGL context
-    void releaseModel();
+    virtual void releaseModel() override;
 };
 
 #endif // CUBEMODEL_H

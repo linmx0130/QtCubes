@@ -17,17 +17,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    cubemodel.cpp \
     glwidget.cpp \
     main.cpp \
     mainwindow.cpp \
-    spheremodel.cpp
+    model/cubemodel.cpp \
+    model/abstractmodel.cpp \
+    model/spheremodel.cpp
 
 HEADERS += \
-    cubemodel.h \
     glwidget.h \
     mainwindow.h \
-    spheremodel.h
+    model/cubemodel.h \
+    model/abstractmodel.h \
+    model/spheremodel.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

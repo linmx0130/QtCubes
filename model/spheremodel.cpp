@@ -21,7 +21,7 @@ std::vector<std::vector<std::pair<GLfloat, GLfloat>>> SphereModel::generateSpher
     return value;
 }
 
-SphereModel::SphereModel(QOpenGLFunctions *f): f(f)
+SphereModel::SphereModel(QOpenGLFunctions *f):AbstractModel(), f(f)
 {
     std::vector<std::vector<std::pair<GLfloat, GLfloat>>> coordinates = generateSphereAngelCoordinates(STACK_COUNT, SECTION_COUNT);
     initVertices(coordinates);
@@ -50,6 +50,12 @@ SphereModel::SphereModel(QOpenGLFunctions *f): f(f)
     // release objects
     m_vbo->release();
     m_vao->release();
+}
+
+SphereModel::~SphereModel() {
+    delete m_shader;
+    delete m_vao;
+    delete m_vbo;
 }
 
 void SphereModel::bindModel() {

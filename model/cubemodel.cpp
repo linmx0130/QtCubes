@@ -45,7 +45,7 @@ static const GLfloat _CUBE_MODEL_VERTEX_DATA[] = {
     -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
 };
 
-CubeModel::CubeModel(QOpenGLFunctions* f): f(f)
+CubeModel::CubeModel(QOpenGLFunctions* f): AbstractModel(), f(f)
 {
     // load shader
     m_shader = new QOpenGLShaderProgram();
@@ -108,4 +108,11 @@ void CubeModel::draw(
     m_shader->setUniformValue(m_shader->uniformLocation("lightPos"), lightPos);
     // draw object
     f->glDrawArrays(GL_TRIANGLES, 0, 6 * 6);
+}
+
+CubeModel::~CubeModel() {
+    delete m_vao;
+    delete m_vbo;
+    delete m_shader;
+    delete m_texture;
 }

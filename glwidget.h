@@ -6,8 +6,8 @@
 #include <QOpenGLFunctions>
 #include <QElapsedTimer>
 
-#include "cubemodel.h"
-#include "spheremodel.h"
+#include "model/cubemodel.h"
+#include "model/spheremodel.h"
 
 class GLWidget : public QOpenGLWidget
 {

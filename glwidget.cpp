@@ -72,26 +72,18 @@ void GLWidget::paintGL()
     projMat.lookAt(this->camera_pos, center, QVector3D(0.f, 1.f, 0.f)); // look from (0,0,3) at (0,0,0), with (0, 1, 0) as the up direction
     QVector3D lightPos(-4.0f, 0.0f, 3.0f);
 
-    sphere->bindModel();
-    {
-        QMatrix4x4 viewMat;
-        viewMat.translate(translationPos[0]);
-        QMatrix4x4 modelMat;
-        modelMat.rotate(degree + initialDegree[0], 0.5f, 1.0f, 0.0f);
-        sphere->draw(modelMat, viewMat, projMat, lightPos);
-    }
-    sphere->releaseModel();
+    std::vector<AbstractModel*> modelsToDraw{sphere, cube, cube, cube, cube};
 
-    cube->bindModel();
-    for (int i=1;i<5;++i) {
+    for (int i=0;i<5;++i) {
+        AbstractModel *model = modelsToDraw[i];
+        model->bindModel();
         QMatrix4x4 viewMat;
         viewMat.translate(translationPos[i]);
         QMatrix4x4 modelMat;
         modelMat.rotate(degree + initialDegree[i], 0.5f, 1.0f, 0.0f);
-        cube->draw(modelMat, viewMat, projMat, lightPos);
+        model->draw(modelMat, viewMat, projMat, lightPos);
+        model->releaseModel();
     }
-    cube->releaseModel();
-
 
     update(); // requrest to schedule an update
 }
